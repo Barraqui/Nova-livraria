@@ -5,7 +5,7 @@ const rl = readlinePromises.createInterface({
     output: process.stdout,
 });
 
-const nome = await rl.question("Qual é o seu nome?\n");
+const nome = await rl.question("Qual é o seu nomew?\n");
 console.log(`Olá, ${nome}`);
 
 rl.close()
