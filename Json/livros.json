@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2,
+    "titulo": "O Cortiço",
+    "autor": "Aluísio Azevedo",
+    "categoria": "romance",
+    "quantidade": 6,
+    "disponivel": true
+  },
+  {
+    "id": 3,
+    "titulo": "1984",
+    "autor": "George Orwell",
+    "categoria": "ficção",
+    "quantidade": 3,
+    "disponivel": true
+  },
+  {
+    "id": 4,
+    "titulo": "Duna",
+    "autor": "Frank Herbert",
+    "categoria": "ficção",
+    "quantidade": 9,
+    "disponivel": true
+  }
+]
