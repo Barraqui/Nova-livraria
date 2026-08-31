@@ -36,14 +36,14 @@ export async function acaoCadastrarNovoLivro(rl: Interface): Promise<void> {
     const autor = await rl.question("Autor: ");
     const categoria = await rl.question("Categoria: ");
     const quantidadeDigitada = await rl.question("Quantidade: ");
-    const quantidade = Number(quantidadeDigitada);
+    const quantidadeTotal = Number(quantidadeDigitada);
     
     const novoLivro = {
         titulo,
         autor,
         categoria,
-        quantidade,
-        status: quantidade > 0 ? "disponivel" : "sem estoque",
+        quantidadeTotal,
+        quantidadeEmprestada: 0,
         ativo: true,
     } as Livro;
 
@@ -67,13 +67,13 @@ export async function acaoAtualizarLivro(rl: Interface): Promise<void> {
    const novoTitulo = await rl.question(`Título (${livro.titulo}): `);
    const novoAutor = await rl.question(`Autor (${livro.autor}): `);
    const novaCategoria = await rl.question(`Categoria (${livro.categoria}): `);
-   const novaQuantidadeDigitada = await rl.question(`Quantidade (${livro.quantidade}): `);
+   const novaQuantidadeDigitada = await rl.question(`Quantidade (${livro.quantidadeTotal}): `);
 
    const dadosNovos: Partial<Livro> = {};
    if(novoTitulo.trim() !== "") dadosNovos.titulo = novoTitulo;
    if(novoAutor.trim() !== "") dadosNovos.autor = novoAutor;
    if(novaCategoria.trim() !== "") dadosNovos.categoria = novaCategoria;
-   if(novaQuantidadeDigitada.trim() !== "") dadosNovos.quantidade = Number(novaQuantidadeDigitada);
+   if(novaQuantidadeDigitada.trim() !== "") dadosNovos.quantidadeTotal = Number(novaQuantidadeDigitada);
 
    const livrosAtualizados = await atualizarLivro(id, dadosNovos);
    console.log("Livro atualizado: ", livrosAtualizados);

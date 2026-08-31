@@ -1,11 +1,11 @@
-export type StatusLivro = "disponivel" | "emprestado" | "reservado" | "sem estoque";
+export type StatusLivro = "disponivel" | "sem estoque";
 
 export interface Livro {
   id: number;
   titulo: string;
   autor: string;
   categoria: string;
-  quantidade: number;
-  status: StatusLivro;
+  quantidadeTotal: number;
+  quantidadeEmprestada: number,
   ativo: boolean;
 }

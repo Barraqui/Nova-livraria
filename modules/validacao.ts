@@ -13,7 +13,7 @@ export function validarLivro(livro: Livro): void {
         throw new Error("A categoria é obrigatória");
     }
 
-    if(livro.quantidade < 0) {
+    if(livro.quantidadeTotal < 0) {
         throw new Error("A quantidade não pode ser negativa");
     }
 }

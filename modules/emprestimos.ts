@@ -8,16 +8,13 @@ export async function emprestarLivro(id: number): Promise<Livro[]> {
         throw new Error("Livro não encontrado");
     }
 
-    if(livro.quantidade <= 0) {
+    const disponivel = livro.quantidadeTotal - livro.quantidadeEmprestada;
+    if(disponivel <= 0) {
         throw new Error("Livro sem exemplares disponíveis para empréstimo");
     }
 
-    const novaQuantidade = livro.quantidade - 1;
-    const status = novaQuantidade > 0 ? "disponivel" : "sem estoque";
-
     const livrosAtualizados = await atualizarLivro(id, {
-        quantidade: novaQuantidade,
-        status: status,
+        quantidadeEmprestada: livro.quantidadeEmprestada + 1,
     });
 
     return livrosAtualizados
@@ -28,12 +25,11 @@ export async function devolverLivro(id: number): Promise<Livro[]> {
     if(!livro) {
         throw new Error("Livro não encontrado");
     }
-    
-    const novaQuantidade = livro.quantidade + 1;
-
+    if(livro.quantidadeEmprestada <= 0) {
+        throw new Error("Não há exemplares emprestados para devolver");
+    }
     const livrosAtualizados = await atualizarLivro(id, {
-        quantidade: novaQuantidade,
-        status: "disponivel"
+        quantidadeEmprestada: livro.quantidadeEmprestada - 1,
     });
     
     return livrosAtualizados;

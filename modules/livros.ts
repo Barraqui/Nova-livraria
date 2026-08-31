@@ -1,6 +1,6 @@
 import { carregarLivros, gerarNovoId, salvarLivros } from "./funcoes_internas.ts";
 import { validarLivro } from "./validacao.ts";
-import type { Livro } from "./types.ts";
+import type { Livro, StatusLivro } from "./types.ts";
 
 export async function listarLivros(): Promise<Livro[]> {
   return await carregarLivros();
@@ -29,9 +29,9 @@ export async function cadastrarLivro(livro: Livro): Promise<Livro> {
         titulo: livro.titulo,
         autor: livro.autor,
         categoria: livro.categoria, 
-        quantidade: livro.quantidade, 
-        status: livro.status,
-        ativo: livro.quantidade > 0
+        quantidadeTotal: livro.quantidadeTotal,
+        quantidadeEmprestada: 0, 
+        ativo: true
     }
     await salvarLivros([...livrosCarregados, novoLivro]);
     return novoLivro;
@@ -66,4 +66,9 @@ export async function buscarLivrosPorTitulo(titulo: string): Promise<Livro[]> {
     );
 
     return livrosEncontrados;
+}
+
+export function calcularStatus(livro: Livro): StatusLivro {
+    const disponivel = livro.quantidadeTotal - livro.quantidadeEmprestada;
+    return disponivel > 0 ? "disponivel" : "sem estoque";
 }
