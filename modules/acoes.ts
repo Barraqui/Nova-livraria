@@ -45,7 +45,7 @@ export async function acaoCadastrarNovoLivro(rl: Interface): Promise<void> {
         quantidadeTotal,
         quantidadeEmprestada: 0,
         ativo: true,
-    } as Livro;
+    };
 
     const livroCriado = await cadastrarLivro(novoLivro);
     console.log("Livro cadastrado: ", livroCriado);

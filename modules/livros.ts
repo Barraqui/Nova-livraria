@@ -18,7 +18,7 @@ export async function buscarLivrosPorCategoria(categoria: string): Promise<Livro
     return livrosEncontrado;
 }
 
-export async function cadastrarLivro(livro: Livro): Promise<Livro> {
+export async function cadastrarLivro(livro: Omit<Livro, "id">): Promise<Livro> {
     validarLivro(livro);
     
     const livrosCarregados = await carregarLivros();

@@ -3,8 +3,17 @@
     "id": 1,
     "titulo": "1984",
     "autor": "Geroge Orwell",
-    "categoria": "Ficção",
+    "categoria": "aventura",
     "quantidadeTotal": 4,
+    "quantidadeEmprestada": 0,
+    "ativo": true
+  },
+  {
+    "id": 2,
+    "titulo": "O Senhor dos Anéis",
+    "autor": "J.R.R. Tolkien",
+    "categoria": "fantasia",
+    "quantidadeTotal": 5,
     "quantidadeEmprestada": 0,
     "ativo": true
   }

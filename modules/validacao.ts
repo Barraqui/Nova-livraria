@@ -1,6 +1,6 @@
 import type { Livro } from "./types.ts";
 
-export function validarLivro(livro: Livro): void {
+export function validarLivro(livro: Omit<Livro, "id">): void {
     if(!livro.titulo || livro.titulo.trim() === "") {
         throw new Error("Título é obrigatório");
     }
