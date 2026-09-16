@@ -1,7 +1,7 @@
 import { atualizarLivro, buscarLivrosPorId } from "./livros.ts";
-import type { Livro } from "./types.ts";
+import type { Livro } from "../src/generated/prisma/client.ts";
 
-export async function emprestarLivro(id: number): Promise<Livro[]> {
+export async function emprestarLivro(id: number): Promise<Livro> {
     const livro = await buscarLivrosPorId(id);
 
     if(!livro) {
@@ -20,7 +20,7 @@ export async function emprestarLivro(id: number): Promise<Livro[]> {
     return livrosAtualizados
 }
 
-export async function devolverLivro(id: number): Promise<Livro[]> {
+export async function devolverLivro(id: number): Promise<Livro> {
     const livro = await buscarLivrosPorId(id);
     if(!livro) {
         throw new Error("Livro não encontrado");

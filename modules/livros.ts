@@ -1,5 +1,7 @@
-import type { Livro, StatusLivro } from "./types.ts";
+import type { StatusLivro } from "./types.ts";
 import { prisma } from "../src/prisma.ts"
+import type { Livro } from "../src/generated/prisma/client.ts";
+import { validarLivro } from "./validacao.ts";
 
 export async function listarLivros() {
   return await prisma.livro.findMany();
@@ -14,6 +16,7 @@ export async function buscarLivrosPorCategoria(categoria: string){
 }
 
 export async function cadastrarLivro(dados: {titulo: string; autor: string; categoria: string; quantidadeTotal: number;}) {
+    validarLivro(dados);
     return await prisma.livro.create({ data: dados })
 }
 
@@ -22,6 +25,9 @@ export async function atualizarLivro(id: number, dadosNovos: {
     autor?: string;
     categoria?: string;
     quantidadeTotal?: number;
+    quantidadeEmprestada?: number;
+    ativo?: boolean;
+
 }) {
     return await prisma.livro.update({where: { id: id }, data: dadosNovos});
 }
