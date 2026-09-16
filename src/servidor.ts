@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { atualizarLivro, buscarLivrosPorId, cadastrarLivro, listarLivros, removerLivro } from "../modules/livros.ts";
 import { devolverLivro, emprestarLivro } from "../modules/emprestimos.ts";

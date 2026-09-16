@@ -1,0 +1,11 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente (contém segredos — NUNCA versionar)
+.env
+
+# Prisma client gerado
+/src/generated/prisma
+
+# Dados de runtime
+Json/
