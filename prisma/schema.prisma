@@ -22,4 +22,26 @@ model Livro {
   quantidadeTotal      Int
   quantidadeEmprestada Int     @default(0)
   ativo                Boolean @default(true)
+  emprestimos Emprestimos[]
+}
+
+model Cliente {
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  telefone String
+  endereco String
+  emprestimos Emprestimos[]
+}
+
+model Emprestimos {
+  id Int @id @default(autoincrement())
+  dataEmprestimo DateTime @default(now())
+  dataDevolucao DateTime?
+
+  livroId Int
+  livro Livro @relation(fields: [livroId], references: [id])
+
+  clienteId Int
+  cliente Cliente @relation(fields: [clienteId], references: [id])
 }

@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { atualizarLivro, buscarLivrosPorId, cadastrarLivro, listarLivros, removerLivro } from "../modules/livros.ts";
 import { devolverLivro, emprestarLivro } from "../modules/emprestimos.ts";
+import { listarClientes, criarCliente } from "../modules/clientes.ts";
 const app = express();
 
 app.use(express.json());
@@ -67,9 +68,10 @@ app.put("/livros/:id", async (requisicao, resposta) => {
 
 app.post("/livros/:id/emprestimo", async (requisicao, resposta) => {
     const id = Number(requisicao.params.id);
+    const clienteId = requisicao.body.clienteId;
 
     try {
-        const livroEmprestado = await emprestarLivro(id);
+        const livroEmprestado = await emprestarLivro(id, clienteId);
         resposta.status(200).json(livroEmprestado);
     } catch (erro) {
         resposta.status(400).json({ erro: erro instanceof Error ? erro.message : "Erro ao emprestar"})
@@ -78,9 +80,10 @@ app.post("/livros/:id/emprestimo", async (requisicao, resposta) => {
 
 app.post("/livros/:id/devolucao", async (requisicao, resposta) => {
     const id = Number(requisicao.params.id);
+    const clienteId = requisicao.body.clienteId;
 
     try {
-        const livroDevolucao = await devolverLivro(id);
+        const livroDevolucao = await devolverLivro(id, clienteId);
         resposta.status(200).json(livroDevolucao);
     } catch (erro) {
         resposta.status(400).json({ erro: erro instanceof Error ? erro.message : "Erro ao devolver o livro"});
@@ -90,3 +93,19 @@ app.post("/livros/:id/devolucao", async (requisicao, resposta) => {
 app.listen(3000, () => {
     console.log("Servidor rodando em http://localhost:3000");
 });
+
+app.get("/clientes", async (requisicao, resposta) => {
+    const clientes = await listarClientes();
+    resposta.json(clientes);
+});
+
+app.post("/clientes", async (requisicao, resposta) => {
+    const dadosCliente = requisicao.body;
+
+    try {
+        const clienteCriado = await criarCliente(dadosCliente);
+        resposta.status(201).json(clienteCriado);
+    } catch (erro) {
+        resposta.status(400).json({erro: erro instanceof Error ? erro.message : "Erro ao criar cliente"})
+    }
+})

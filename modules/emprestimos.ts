@@ -1,8 +1,9 @@
 import { atualizarLivro, buscarLivrosPorId } from "./livros.ts";
 import type { Livro } from "../src/generated/prisma/client.ts";
+import { prisma } from "../src/prisma.ts";
 
-export async function emprestarLivro(id: number): Promise<Livro> {
-    const livro = await buscarLivrosPorId(id);
+export async function emprestarLivro( livroId: number, clienteId: number){
+    const livro = await buscarLivrosPorId(livroId);
 
     if(!livro) {
         throw new Error("Livro não encontrado");
@@ -13,24 +14,42 @@ export async function emprestarLivro(id: number): Promise<Livro> {
         throw new Error("Livro sem exemplares disponíveis para empréstimo");
     }
 
-    const livrosAtualizados = await atualizarLivro(id, {
+    const emprestimo = await prisma.emprestimos.create({
+        data: { livroId: livroId, clienteId: clienteId }
+    });
+
+    await atualizarLivro(livroId, {
         quantidadeEmprestada: livro.quantidadeEmprestada + 1,
     });
 
-    return livrosAtualizados
+    return emprestimo
 }
 
-export async function devolverLivro(id: number): Promise<Livro> {
-    const livro = await buscarLivrosPorId(id);
-    if(!livro) {
-        throw new Error("Livro não encontrado");
-    }
-    if(livro.quantidadeEmprestada <= 0) {
-        throw new Error("Não há exemplares emprestados para devolver");
-    }
-    const livrosAtualizados = await atualizarLivro(id, {
-        quantidadeEmprestada: livro.quantidadeEmprestada - 1,
+export async function devolverLivro(livroId: number, clienteId: number) {
+    const emprestimo = await prisma.emprestimos.findFirst({ 
+        where: {
+            livroId: livroId, 
+            clienteId: clienteId, 
+            dataDevolucao: null
+        }
     });
-    
-    return livrosAtualizados;
+
+    if(!emprestimo) {
+        throw new Error("Não há empréstimo em aberto desse cliente para esse livro");
+    }
+
+    const emprestimoAtualizado = await prisma.emprestimos.update({
+        where: { id: emprestimo.id },
+        data: {dataDevolucao: new Date()}
+    })
+
+    const livro = await buscarLivrosPorId(livroId);
+
+    if(livro) {
+        await atualizarLivro(livroId, {
+            quantidadeEmprestada: livro.quantidadeEmprestada - 1,
+        });
+    }
+
+    return emprestimoAtualizado;
 }
